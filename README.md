@@ -21,6 +21,8 @@
 ![](./images/preview.gif)
 ![](./images/preview2.gif)
 
+> 若无法预览图片，将添加DNS解析：`151.101.0.133 raw.githubusercontent.com`
+
 
 ### 安装
 
