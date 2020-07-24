@@ -54,7 +54,7 @@ export default {
     },
     beforeDraw(context, transform) {
       context.setFillStyle('yellow')
-      transform.zoom = 2
+      // transform.zoom = 2
     },
     afterDraw(ctx, info) {
       ctx.setFillStyle('red')
