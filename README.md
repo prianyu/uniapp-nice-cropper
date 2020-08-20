@@ -106,7 +106,7 @@ export default {
 |freeBoundDetect|Boolean|否|false|旋转时开启边界探测，默认旋转不会进行边界探测|
 |keepRatio|Boolean|否|false|是否固定裁剪框比例|
 |disablePreview|Boolean|否|false|是否禁止预览，默认开启预览，每次操作结束会高亮突出裁剪区域|
-|maxZoom|Number|否|Infinity|图片最大的放大倍数|
+|maxZoom|Number|否|10|图片最大的放大倍数|
 |minZoom|Number|否|1|图片最小的缩放倍数|
 |angle|Number|否|0|初始化时的旋转角度，单位度|
 |zoom|Number|否|1|初始化的放大缩放倍数|

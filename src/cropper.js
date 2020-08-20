@@ -66,7 +66,7 @@ export default {
     disablePreview: Boolean, // disable preview after cutting
     maxZoom: { // maximum scaling factor 
       type: Number,
-      default: Infinity
+      default: 10 // can not be Infinity in baidu-MiniProgram
     },
     minZoom: { // minimum scaling factor
       type: Number,
