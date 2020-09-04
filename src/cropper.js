@@ -72,8 +72,14 @@ export default {
       type: Number,
       default: 1
     },
-    angle: Number, // initial angle of rotation
-    zoom: Number, // initial scaling factor
+    angle: { // initial angle of rotation
+      type: Number,
+      default: 0
+    },
+    zoom: { // initial scaling factor
+      type: Number,
+      default: 1
+    },
     offset: { // initial offset relative to the cutter left border
       type: Array,
       default() {
