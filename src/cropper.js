@@ -465,9 +465,9 @@ export default {
 
       const zoom = transform.zoom
       context.fillRect(0, 0, this.ctrlWidth * canvasZoom, this.ctrlHeight * canvasZoom) // clear canvas
-      context.translate(transform.translate.x - corner.left + img.width / 2, transform.translate.y - corner.top + img.height / 2) // translate the canvas's orgin to the image center
+      context.translate((transform.translate.x - corner.left + img.width / 2) *canvasZoom, (transform.translate.y - corner.top + img.height / 2) * canvasZoom) // translate the canvas's orgin to the image center
       context.rotate(transform.angle * Math.PI / 180)
-      context.translate(-img.width * zoom * 0.5, -img.height * zoom * 0.5)
+      context.translate(-img.width * zoom * 0.5 * canvasZoom, -img.height * zoom * 0.5 * canvasZoom)
       context.drawImage(this.img, 0, 0, img.width * zoom * canvasZoom, img.height * zoom * canvasZoom)
       context.restore()
       this.$emit('afterDraw', context, {
