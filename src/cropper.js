@@ -64,6 +64,7 @@ export default {
     freeBoundDetect: Boolean, // open boundary detection while doing rotation
     keepRatio: Boolean, // keep the ratio of the cutter
     disablePreview: Boolean, // disable preview after cutting
+    showCtrlBorder: Boolean, // show cutter border
     maxZoom: { // maximum scaling factor 
       type: Number,
       default: 10 // can not be Infinity in baidu-MiniProgram
@@ -152,6 +153,7 @@ export default {
   created() {
     this.canvasId = generateCanvasId()
     uni.getSystemInfo().then(result => {
+      result = result[1] || {windowWidth: 375, windowHeight: 736}
       this.ratio = result.windowWidth / 750
       this.windowHeight = result.windowHeight
       this.init()
