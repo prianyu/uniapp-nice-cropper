@@ -65,6 +65,12 @@ export default {
     keepRatio: Boolean, // keep the ratio of the cutter
     disablePreview: Boolean, // disable preview after cutting
     showCtrlBorder: Boolean, // show cutter border
+    resetCut: Boolean, // reset cut while img change
+    fit: {
+      type: Boolean,
+      default: true
+    },
+    imageCenter: Boolean, // auto center/middle for image
     maxZoom: { // maximum scaling factor 
       type: Number,
       default: 10 // can not be Infinity in baidu-MiniProgram
@@ -109,7 +115,12 @@ export default {
     quality: {
       type: Number,
       default: 1
-    }
+    },
+    maskType: { // type for mask
+      type: String,
+      default: "shadow"
+    },
+    circleView: Boolean // circle clip view
   },
   data() {
     return {
@@ -143,10 +154,21 @@ export default {
     transformMeta: function() {
       const transform = this.transform
       return `translate3d(${transform.translate.x}px, ${transform.translate.y}px, 0) rotate(${transform.angle}deg) scale(${transform.zoom})`
+    },
+    ctrlStyle: function() {
+      const corner = this.corner
+      let cssStr = `left: ${corner.left}px;top: ${corner.top}px;right: ${corner.right}px;bottom: ${corner.bottom }px;`
+      if(this.maskType !== 'outline') {
+        cssStr += `box-shadow: 0 0 0 50000rpx rgba(0,0,0, ${this.view ? 0.8 : 0.4})`
+      } else {
+        cssStr += `outline: rgba(0,0,0, ${this.view ? 0.8 : 0.4}) solid 5000px`
+      }
+      return cssStr
     }
   },
   watch: {
     src: function() {
+      if(this.resetCut) this.resetCutReact()
       this.initImage()
     }
   },
@@ -186,7 +208,7 @@ export default {
         this.initCut()
       })
     },
-    initCut() { // init size and position of the cutter
+    resetCutReact() {// init size and position of the cutter
       this.ctrlWidth = Math.min(this.toPx(this.cutWidth), this.containerWidth)
       if (this.cutHeight) {
         this.ctrlHeight = Math.min(this.toPx(this.cutHeight), this.containerHeight)
@@ -202,6 +224,9 @@ export default {
         top: cornerStartY,
         bottom: this.containerHeight - this.ctrlHeight - cornerStartY
       }
+    },
+    initCut() { 
+      this.resetCutReact()
       this.initImage()
     },
     async initImage() {
@@ -220,15 +245,22 @@ export default {
       // init image size
       this.image.originWidth = err ? this.ctrlWidth : res.width
       this.image.originHeight = err ? this.ctrlHeight : res.height
-      this.image.width = this.ctrlWidth
+      this.image.width = this.fit ? this.ctrlWidth : this.image.originWidth
       this.image.height = err ? this.ctrlHeight : res.height / res.width * this.image.width
       this.img = res.path
-      this.transform.translate = {
-        x: this.corner.left + (this.offset[0] || 0),
-        y: this.corner.top + (this.offset[1] || 0)
+
+      const offset = [0, 0]
+      if(this.imageCenter) {
+        offset[0] = (this.ctrlWidth - this.image.width) / 2
+        offset[1] = (this.ctrlHeight - this.image.height) / 2
       }
-      this.transform.zoom = this.zoom || 1
+      offset[0] += this.offset[0] || 0
+      offset[1] += this.offset[1] || 0
+      
+      this.setTranslate(offset)
+      this.setZoom(this.zoom)
       this.transform.angle = this.freeBoundDetect || !this.disableRotate ? this.angle : 0
+
       this.setBoundary() // boundary detect
       this.preview() // preview
       this.draw()
@@ -347,12 +379,15 @@ export default {
       this.transform.angle += this.params.angle
     },
     setZoom(scale) {
-      this.transform.zoom = Number(scale) || 1
+      scale = Math.min(Math.max(Number(scale) || 1, this.minZoom), this.maxZoom)
+      this.transform.zoom = scale
     },
     setTranslate(offset) {
       if(Array.isArray(offset)) {
-        this.transform.translate.x = Number[offset[0]] || this.transform.translate.x
-        this.transform.translate.y = Number[offset[1]] || this.transform.translate.y
+        const x = Number(offset[0])
+        const y = Number(offset[1])
+        this.transform.translate.x = isNaN(x) ? this.transform.translate.x : this.corner.left + x
+        this.transform.translate.y = isNaN(y) ? this.transform.translate.y : this.corner.top + y
       }
     },
     setRotate(angle) {

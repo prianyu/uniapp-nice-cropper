@@ -106,6 +106,9 @@ export default {
 |freeBoundDetect|Boolean|否|false|旋转时开启边界探测，默认旋转不会进行边界探测|
 |keepRatio|Boolean|否|false|是否固定裁剪框比例|
 |showCtrlBorder|Boolean|否|false|是否显示裁剪框边框（1.0.5新增）|
+|resetCut|Boolean|否|false|图片改变是否重置裁剪框（1.1.0新增）|
+|imageCenter|Boolean|否|false|图片初始状态是否在居中（1.1.0新增）|
+|fit|Boolean|否|true|图片初始化宽度是否与裁剪框一致，设置为false时为原始大小（1.1.0新增）|
 |disablePreview|Boolean|否|false|是否禁止预览，默认开启预览，每次操作结束会高亮突出裁剪区域|
 |maxZoom|Number|否|10|图片最大的放大倍数|
 |minZoom|Number|否|1|图片最小的缩放倍数|
@@ -117,6 +120,8 @@ export default {
 |canvasZoom|Number|否|1|导出图片的大小相对于裁剪框大小的倍数|
 |fileType|String|否|png|导出图片的格式，仅支持png和jpg|
 |quality|Number|否|1|导出图片的质量，值为(0,1]，非法值均按照1处理|
+|maskType|String|否|shadow|遮罩层类型，有shadow和outline类型，shadow类型支持原型预览|
+|circleView|Boolean|否|false|是否使用原型预览，仅maskType不为outline时生效|
 
 ### 事件
 
@@ -139,8 +144,9 @@ export default {
 |-------|----|----|
 |setTransform|(x:Number, y:Number, angle:Number, scale:Number）|设置变换信息，分别对应translateX,translateY, rotate(单位为度）,scale缩放倍数|
 |setTranslate|([x:Number, y:Number])|设置平移的量|
-|setZoom| scale:Number| 设置缩放倍数|
-|setRotate| angle: Number| 设置旋转的角度，单位为度|
+|setZoom| scale:Number| 设置缩放倍数（此API受`maxZoom`和`minZoom`设置的限制|
+|setRotate| angle: Number| 设置旋转的角度，单位为度（此API不受`freeBoundDetect`和`disableRotate`设置的限制|
+|resetCutReact| 无| 重置裁剪框（v1.1.0+）|
 
 
 ## 其它
