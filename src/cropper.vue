@@ -30,7 +30,7 @@
   height: 30rpx;
   position: absolute;
 }
-.nice-cropper__corner ::after {
+.nice-cropper__corner::after {
   position: absolute;
   left: -5px;
   right: -5px;

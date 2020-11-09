@@ -49,8 +49,24 @@ export default {
   components: {
     ImageCropper
   },
+  data() {
+    return {
+      src: ''
+    }
+  },
   methods: {
-     beforeDraw(context, transform) {
+    selectImg() {
+      uni.chooseImage({
+        count: 1,
+        sizeType: ['original'],
+        sourceType: ['album', 'camera'],
+        success: res => {
+          var tempFilePaths = res.tempFilePaths
+          this.src = tempFilePaths[0]
+        }
+      })
+    },
+    beforeDraw(context, transform) {
       context.setFillStyle('yellow')
       transform.zoom = 2
     },
@@ -82,8 +98,28 @@ export default {
         @beforeDraw="beforeDraw"
       />
     </view>
+    <button @tap="selectImg">上传图片</button>
   </view>
 </template>
+```
+
+#### 4. CSS
+```css
+page {
+  /* #ifdef MP-ALIPAY */
+  position: absolute;
+  width: 100%;
+	/* #endif */
+  height: 100%;
+  border: 1px solid red;
+  box-sizing: border-box;
+}
+.container {
+  height: 100%;
+}
+.cropper-wrap {
+  height: calc(100% - 96rpx);
+}
 ```
 
 ### 组件属性
