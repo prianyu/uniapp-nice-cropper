@@ -400,6 +400,7 @@ export default {
     },
     setCutMode(type) {
       if(!this.src) return 
+      if(this.disableCtrl) return
       this.cutMode = true
       this.cutDirection = type
     },
